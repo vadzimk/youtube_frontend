@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import SearchBox from "./components/SearchBox.js";
+import channelService from './services/channel.js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+
+    const [videoIDs, setVideoIDs] = useState([]);
+
+    useEffect(() => {
+        channelService.getAll().then(data => {
+            const ids = data.items.map(item => item.id.videoId);
+            setVideoIDs(ids);
+        });
+
+    }, []);
+
+    const handleSearch = async (q) => {
+        try {
+            const data = await channelService.search(q);
+            const ids = data.items.map(item => item.id.videoId);
+            setVideoIDs(ids);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    return (
+        <div>
+            <SearchBox handleSearch={handleSearch}/>
+            {
+                videoIDs.map(id => <div>{id}</div>)
+            }
+        </div>
+    );
 }
+
 
 export default App;
