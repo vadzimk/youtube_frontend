@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const baseUrl = '/api/channel';
 
+
 const getAll = async () => {
    return axios.get(`${baseUrl}`).then(res=>res.data);
 }

@@ -1,33 +1,45 @@
 import React, {useState} from 'react';
 
-
+const styles = {
+    barContainer: {
+        maxWidth: '800px', margin: "auto"
+    },
+}
 
 const SearchBox = ({handleSearch}) => {
     const [query, setQuery] = useState('');
 
 
-    const handleQueryChange = (e)=>{
+    const handleQueryChange = (e) => {
         setQuery(e.target.value);
     }
 
-    const handleSubmitQuery=(e)=>{
+    const handleSubmitQuery = (e) => {
         e.preventDefault();
-        handleSearch(query);
+        if (query) handleSearch(query);
         setQuery('');
     }
 
 
-    return(
-        <form onSubmit={handleSubmitQuery}>
-            <label> Search
-                <input
-                    type="text"
-                    name="q"
-                    value={query}
-                    onChange={handleQueryChange}
-                />
-            </label>
-        </form>
+    return (
+        <div className="search bar ui segment" style={styles.barContainer}>
+            <form onSubmit={handleSubmitQuery}>
+                <div className="ui fluid action input">
+                    <input
+                        type="text"
+                        name="q"
+                        value={query}
+                        onChange={handleQueryChange}
+                        placeholder="Search"
+                    />
+                    <button className="ui icon button">
+                        <i className="search icon"/>
+                    </button>
+
+                </div>
+            </form>
+        </div>
+
     )
 }
 

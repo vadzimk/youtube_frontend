@@ -2,14 +2,32 @@ import React, {useState, useEffect} from 'react';
 import SearchBox from "./components/SearchBox.js";
 import channelService from './services/channel.js';
 
-const App = () => {
+import Grid from "./components/Grid.js";
 
-    const [videoIDs, setVideoIDs] = useState([]);
+
+
+const App = () => {
+    const [videoItems, setVideoItems] = useState([]);
+    const [notification, setNotification] = useState({message: '', isError: false});
+
+    const notify = (message, isError = false) => {
+        console.log(message)
+        setNotification({message, isError})
+        setTimeout(() => setNotification({message: '', isError: false}), 5000)
+    }
+
+    const getItems = (data) => {
+        if (!data.items) {
+            notify(data.error, true)
+            return []
+        }
+        return data.items;
+    }
+
 
     useEffect(() => {
         channelService.getAll().then(data => {
-            const ids = data.items.map(item => item.id.videoId);
-            setVideoIDs(ids);
+            setVideoItems(getItems(data));
         });
 
     }, []);
@@ -17,19 +35,16 @@ const App = () => {
     const handleSearch = async (q) => {
         try {
             const data = await channelService.search(q);
-            const ids = data.items.map(item => item.id.videoId);
-            setVideoIDs(ids);
+            setVideoItems(getItems(data));
         } catch (e) {
             console.log(e);
         }
     }
 
     return (
-        <div>
+        <div className="container ui">
             <SearchBox handleSearch={handleSearch}/>
-            {
-                videoIDs.map(id => <div>{id}</div>)
-            }
+            <Grid videoItems={videoItems}/>
         </div>
     );
 }
