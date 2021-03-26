@@ -1,37 +1,30 @@
 import React from "react";
 
-const styles = {
-    thumbnail: {
-        flex: 'calc(100% / 3)',
-        textAlign: 'center',
-        flexGrow: 1,
-        flexShrink:0,
-        paddingLeft: '2rem',
-        paddingRight: '2rem',
-        marginTop: '1rem',
-        marginBottom: '1rem',
-    },
-    imageStyle: {
-        maxWidth: '100%',
-        height: 'auto'
-    },
-    textStyle: {
-        padding: '1rem'
-    }
-}
 
-const Thumbnail =({videoItem})=>{
+
+const Thumbnail = ({videoItem, handleThumbnailClick}) => {
 
     return (
-        <div className="ui container" style={styles.thumbnail}>
-            <img
-                src={videoItem.snippet.thumbnails.medium.url}
-                alt={videoItem.snippet.description}
-                style={styles.imageStyle}
-            />
-            <div>
-                {videoItem.snippet.title}
+        <div className="card">
+            <div className="image">
+                <img
+                    src={videoItem.snippet.thumbnails.medium.url}
+                    alt={videoItem.snippet.description}
+
+                    onClick={() => handleThumbnailClick(videoItem)}
+                />
             </div>
+            <div className="content">
+
+
+                <div className="header">
+                    {videoItem.snippet.title}
+                </div>
+                <div className="description">
+                    {videoItem.snippet.description}
+                </div>
+            </div>
+
         </div>
     )
 }
