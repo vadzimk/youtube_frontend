@@ -32,6 +32,7 @@ const App = () => {
         if (pageNumber <= Math.floor(videoItems.length / MAX_ITEMS_PER_PAGE)) {
             setPageVideoItems(videoItems.slice(indexStart, indexEnd));
         } else {
+            // may make recursive calls
             const data = await channelService.getNextPage({
                 q: query,
                 maxResults: MAX_PAGES * MAX_ITEMS_PER_PAGE,
@@ -39,7 +40,6 @@ const App = () => {
             });
             setVideoItems(videoItems.concat(getItems(data)));
             setNextPageToken(data.nextPageToken);
-
         }
         setSelectedPageNumber(pageNumber);
     }
