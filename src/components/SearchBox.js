@@ -2,13 +2,12 @@ import React, {useState} from 'react';
 
 const styles = {
     barContainer: {
-        maxWidth: '800px', margin: "auto"
+        maxWidth: '800px', margin: "auto",
     },
 }
 
 const SearchBox = ({handleSearch}) => {
     const [query, setQuery] = useState('');
-
 
     const handleQueryChange = (e) => {
         setQuery(e.target.value);
@@ -16,30 +15,28 @@ const SearchBox = ({handleSearch}) => {
 
     const handleSubmitQuery = (e) => {
         e.preventDefault();
-        if (query) handleSearch(query);
+        handleSearch(query);
         setQuery('');
     }
 
-
     return (
-        <div className="search bar ui segment" style={styles.barContainer}>
-            <form onSubmit={handleSubmitQuery}>
-                <div className="ui fluid action input">
-                    <input
-                        type="text"
-                        name="q"
-                        value={query}
-                        onChange={handleQueryChange}
-                        placeholder="Search"
-                    />
-                    <button className="ui icon button">
-                        <i className="search icon"/>
-                    </button>
+            <div className="search bar ui segment" style={styles.barContainer}>
+                <form onSubmit={handleSubmitQuery}>
+                    <div className="ui fluid action input">
+                        <input
+                            type="text"
+                            name="q"
+                            value={query}
+                            onChange={handleQueryChange}
+                            placeholder="Search"
+                        />
+                        <button className="ui icon button">
+                            <i className="search icon"/>
+                        </button>
 
-                </div>
-            </form>
-        </div>
-
+                    </div>
+                </form>
+            </div>
     )
 }
 

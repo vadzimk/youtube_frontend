@@ -5,9 +5,8 @@ import Thumbnail from "./Thumbnail.js";
 const Grid = ({videoItems, handleThumbnailClick}) => {
     const [numColumnsClassName, setNumColumnsClassName] = useState('three');
 
-
     return (
-        <div>
+        <div style={{marginTop: '20px'}}>
             <div className="ui form">
                 <div className="ui inline fields" style={{justifyContent: 'flex-end'}}>
                     <div className="field">

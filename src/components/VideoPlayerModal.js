@@ -5,7 +5,6 @@ import {Modal} from "semantic-ui-react";
 const VideoPlayerModal = ({isModalOpen, onClose, selectedVideo})=>{
     if (!selectedVideo) return null;
 
-
     const videoUrl = `https://www.youtube.com/embed/${selectedVideo.id.videoId}`;
 
     return(

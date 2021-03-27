@@ -10,13 +10,10 @@ const Thumbnail = ({videoItem, handleThumbnailClick}) => {
                 <img
                     src={videoItem.snippet.thumbnails.medium.url}
                     alt={videoItem.snippet.description}
-
                     onClick={() => handleThumbnailClick(videoItem)}
                 />
             </div>
             <div className="content">
-
-
                 <div className="header">
                     {videoItem.snippet.title}
                 </div>
@@ -24,7 +21,6 @@ const Thumbnail = ({videoItem, handleThumbnailClick}) => {
                     {videoItem.snippet.description}
                 </div>
             </div>
-
         </div>
     )
 }

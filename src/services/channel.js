@@ -3,13 +3,16 @@ import axios from 'axios';
 const baseUrl = '/api/channel';
 
 
-const getAll = async () => {
-   return axios.get(`${baseUrl}`).then(res=>res.data);
+const getNextPage = ({q, pageToken, maxResults}) => {
+    const params = {}
+    if (q) params.q = q;
+    if (pageToken) params.pageToken = pageToken;
+    if (maxResults) params.maxResults = maxResults;
+
+
+    return axios.get(baseUrl, {params}).then(res => res.data);
 }
 
-const search = async (q)=>{
-   return await axios.get(`${baseUrl}?q=${q}`).then(res=>res.data);
-}
 
-const channelService = {getAll, search}
+const channelService = {getNextPage}
 export default channelService;
