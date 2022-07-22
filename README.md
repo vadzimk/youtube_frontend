@@ -1,6 +1,7 @@
 # youtube-frontend
 ## Overview
-This is an alternative YouTube frontend that consumes YouTube API
+This is an alternative YouTube frontend made with React.
+
 
 ![img.png](img.png)
 
