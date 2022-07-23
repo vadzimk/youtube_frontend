@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import SearchBox from "./components/SearchBox.js";
 import channelService from './services/channel.js';
 
@@ -25,7 +25,7 @@ const App = () => {
         return data.items;
     }
 
-    const handleSelectPage = async (pageNumber) => {
+    const handleSelectPage = useCallback(async (pageNumber) => {
         const indexStart = (pageNumber - 1) * MAX_ITEMS_PER_PAGE;
         const indexEnd = Math.min(indexStart + MAX_ITEMS_PER_PAGE, videoItems.length - 1);
         setSelectedPageNumber(pageNumber);
@@ -42,7 +42,7 @@ const App = () => {
             setNextPageToken(data.nextPageToken);
         }
         setSelectedPageNumber(pageNumber);
-    }
+    }, [nextPageToken, query,videoItems])
 
     useEffect(() => {
         channelService.getNextPage({
@@ -57,7 +57,7 @@ const App = () => {
 
     useEffect(() => {
         handleSelectPage(selectedPageNumber);
-    }, [videoItems])
+    }, [videoItems, handleSelectPage, selectedPageNumber])
 
 
     const handleSearch = async (query) => {
