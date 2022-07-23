@@ -5,7 +5,7 @@ workflow:
     - when: always
 
 variables:
-  FLUSHCACHE: "false"
+  FLUSHCACHE: "true"
 
 stages:
 - install
@@ -47,9 +47,14 @@ build_react:
       paths:
         - build
       policy: push
-  only:
-    changes:
-      - ./**/*
+  rules: # TODO trigger job to produce cache always when $FLUSHCACHE == "true"
+    - if: $FLUSHCACHE == "true"
+      when: always
+    - if: $FLUSHCACHE == "false"
+      changes:
+        - ./**/*
+      when: always
+    - when: never
 
 
 deploy_client_build:
