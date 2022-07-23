@@ -1,0 +1,75 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "master" && $CI_PIPELINE_SOURCE != "merge_request_event"
+      when: never
+    - when: always
+
+variables:
+  FLUSHCACHE: "false"
+
+stages:
+- install
+- build
+- deploy
+
+install_dependencies:
+  stage: install
+  image: node:16.13.0
+  script:
+    - npm ci --cache .npm --prefer-offline
+  cache:
+    key: DEP-C-$CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+      - .npm/
+    policy: push
+  rules: # TODO trigger job to produce cache always when $FLUSHCACHE == "true"
+    - if: $FLUSHCACHE == "true"
+      when: always
+    - if: $FLUSHCACHE == "false"
+      changes:
+        - package-lock.json
+      when: always
+    - when: never
+
+build_react:
+  stage: build
+  image: node:16.13.0
+  script:
+    - npm run build
+  cache:
+    - key: DEP-C-$CI_COMMIT_REF_SLUG
+      paths:
+        - node_modules
+        - .npm/
+      policy: pull
+    - key: BUILD-C-$CI_COMMIT_REF_SLUG
+      paths:
+        - build
+      policy: push
+  only:
+    changes:
+      - ./**/*
+
+
+deploy_client_build:
+  stage: deploy
+  script:
+    - ls -al
+    - ls -al 
+    - chmod 400 $WS_KEY
+    - ssh -o StrictHostKeyChecking=no -i $WS_KEY ubuntu@$WS_HOST '
+      if [ ! -d /home/ubuntu/applications/share/nginx/html/youtubegrid ];
+      then mkdir -p /home/ubuntu/applications/share/nginx/html/youtubegrid;
+      fi;
+      sudo rm -fr /home/ubuntu/applications/share/nginx/html/youtubegrid/*;
+      '
+    - scp -o StrictHostKeyChecking=no -i $WS_KEY -r build/*  ubuntu@$WS_HOST:/home/ubuntu/applications/share/nginx/html/youtubegrid/
+  cache:
+    - key: BUILD-C-$CI_COMMIT_REF_SLUG 
+      paths:
+        - build
+      policy: pull
+  environment:
+    name: development
+    url: https://youtubegrid.vadzimk.com
